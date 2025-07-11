@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebP画像変換ツール</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .drop-zone:hover {
+            border-color: #764ba2;
+            background: rgba(118, 75, 162, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .drop-zone.dragover {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            transform: scale(1.02);
+        }
+
+        .drop-zone i {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .drop-text {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .drop-subtext {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .settings {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .setting-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .setting-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .scale-input {
+            width: 100px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .scale-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            accent-color: #667eea;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .select-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .log-area {
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .log-success {
+            color: #2ecc71;
+        }
+
+        .log-error {
+            color: #e74c3c;
+        }
+
+        .log-info {
+            color: #3498db;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status {
+            text-align: center;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .drop-zone {
+                padding: 40px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ WebP変換ツール</h1>
+        
+        <div class="drop-zone" id="dropZone">
+            <i>📁</i>
+            <div class="drop-text">画像ファイルまたはフォルダをドラッグ＆ドロップ</div>
+            <div class="drop-subtext">対応形式: PNG, JPG, JPEG, WebP</div>
+        </div>
+
+        <button class="select-btn" onclick="document.getElementById('fileInput').click()">
+            📂 ファイルを選択
+        </button>
+        <input type="file" id="fileInput" class="file-input" multiple accept=".png,.jpg,.jpeg,.webp" webkitdirectory>
+
+        <div class="settings">
+            <div class="setting-group">
+                <label class="setting-label">縮小率:</label>
+                <input type="number" id="scaleInput" class="scale-input" value="1.0" min="0.25" max="1.0" step="0.05">
+            </div>
+            <div class="setting-group">
+                <label class="setting-label">画質向上:</label>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="enhanceCheckbox" class="checkbox" checked>
+                    <span>有効にする</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="status" id="status">準備完了</div>
+
+        <div class="log-area" id="logArea">
+            <div class="log-info">WebP変換ツールが起動しました。</div>
+            <div class="log-info">画像ファイルまたはフォルダをドラッグ＆ドロップしてください。</div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const scaleInput = document.getElementById('scaleInput');
+        const enhanceCheckbox = document.getElementById('enhanceCheckbox');
+        const logArea = document.getElementById('logArea');
+        const status = document.getElementById('status');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+
+        // ドラッグ＆ドロップイベント
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // ファイル選択イベント
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const scale = parseFloat(scaleInput.value);
+            const enhance = enhanceCheckbox.checked;
+
+            if (scale < 0.25 || scale > 1.0) {
+                addLog('❌ 縮小率は0.25〜1.0の範囲で指定してください。', 'error');
+                return;
+            }
+
+            addLog('🔄 変換処理を開始します...', 'info');
+            status.textContent = '処理中...';
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+
+            const formData = new FormData();
+            formData.append('scale', scale);
+            formData.append('enhance', enhance);
+
+            // ファイルを追加
+            for (let file of files) {
+                formData.append('files', file);
+            }
+
+            fetch('/convert', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLog('✅ 変換が完了しました！', 'success');
+                    addLog(data.message, 'info');
+                    status.textContent = '完了';
+                    progressFill.style.width = '100%';
+                    // ダウンロードを自動で開始
+                    setTimeout(() => {
+                        window.location.href = data.downloadUrl;
+                    }, 1000);
+                } else {
+                    addLog(`❌ エラー: ${data.error}`, 'error');
+                    status.textContent = 'エラー';
+                }
+            })
+            .catch(error => {
+                addLog(`❌ 通信エラー: ${error.message}`, 'error');
+                status.textContent = 'エラー';
+            });
+        }
+
+        function addLog(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+    </script>
+</body>
+</html> 
