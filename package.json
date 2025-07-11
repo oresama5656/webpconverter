@@ -1,0 +1,23 @@
+{
+  "name": "webp-image-converter",
+  "version": "1.0.0",
+  "description": "高品質WebP画像変換ツール - 元画像と同じサイズで最大限の画質を保持",
+  "main": "convert.js",
+  "scripts": {
+    "start": "node convert.js",
+    "convert": "node convert.js",
+    "resize": "node convert-resize.js"
+  },
+  "keywords": [
+    "webp",
+    "image",
+    "converter",
+    "sharp",
+    "squoosh"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.32.6"
+  }
+} 

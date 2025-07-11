@@ -1,0 +1,6 @@
+node_modules/
+*.log
+.DS_Store
+temp_images/
+output_webp/
+output_webp_resize/ 
