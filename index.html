@@ -284,10 +284,17 @@
             dropZone.classList.remove('dragover');
         });
 
-        dropZone.addEventListener('drop', (e) => {
+        dropZone.addEventListener('drop', async (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
+            const items = e.dataTransfer.items;
+            if (items && items.length > 0) {
+                // フォルダ対応
+                const files = await getAllFilesFromItems(items);
+                handleFiles(files);
+            } else {
+                handleFiles(e.dataTransfer.files);
+            }
         });
 
         // ファイル選択イベント
@@ -343,6 +350,38 @@
             .catch(error => {
                 addLog(`❌ 通信エラー: ${error.message}`, 'error');
                 status.textContent = 'エラー';
+            });
+        }
+
+        // フォルダも含めて全ファイルを取得
+        async function getAllFilesFromItems(items) {
+            let files = [];
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i].webkitGetAsEntry && items[i].webkitGetAsEntry();
+                if (item) {
+                    files = files.concat(await traverseFileTree(item));
+                }
+            }
+            return files;
+        }
+
+        function traverseFileTree(item, path = '') {
+            return new Promise((resolve) => {
+                if (item.isFile) {
+                    item.file((file) => {
+                        file.fullPath = path + file.name;
+                        resolve([file]);
+                    });
+                } else if (item.isDirectory) {
+                    const dirReader = item.createReader();
+                    dirReader.readEntries(async (entries) => {
+                        let files = [];
+                        for (let entry of entries) {
+                            files = files.concat(await traverseFileTree(entry, path + item.name + '/'));
+                        }
+                        resolve(files);
+                    });
+                }
             });
         }
 
