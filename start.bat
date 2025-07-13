@@ -26,6 +26,13 @@ echo.
 echo 終了するには Ctrl+C を押してください
 echo.
 
-node server.js
+REM サーバー起動をバックグラウンドで実行し、少し待ってからブラウザを開く
+start /b node server.js
+timeout /t 3 /nobreak > nul
+echo 🌐 ブラウザを自動で開いています...
+start http://localhost:3000
+
+REM サーバープロセスを待機
+waitfor /s %COMPUTERNAME% /t 1 > nul 2>&1
 
 pause 

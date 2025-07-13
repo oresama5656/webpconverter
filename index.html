@@ -302,7 +302,7 @@
             handleFiles(e.target.files);
         });
 
-        function handleFiles(files) {
+        async function handleFiles(files) {
             if (files.length === 0) return;
 
             const scale = parseFloat(scaleInput.value);
@@ -318,39 +318,64 @@
             progressBar.style.display = 'block';
             progressFill.style.width = '0%';
 
-            const formData = new FormData();
-            formData.append('scale', scale);
-            formData.append('enhance', enhance);
+            try {
+                // ファイルをBase64に変換
+                const filePromises = Array.from(files).map(file => {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const base64 = reader.result.split(',')[1]; // data:image/...;base64, の部分を除去
+                            resolve({
+                                name: file.name,
+                                data: base64
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                });
 
-            // ファイルを追加
-            for (let file of files) {
-                formData.append('files', file);
-            }
+                const fileData = await Promise.all(filePromises);
 
-            fetch('/convert', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
+                // Netlify Functionsに送信
+                const response = await fetch('/.netlify/functions/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        files: fileData,
+                        scale: scale,
+                        enhance: enhance
+                    })
+                });
+
+                const data = await response.json();
+
                 if (data.success) {
                     addLog('✅ 変換が完了しました！', 'success');
                     addLog(data.message, 'info');
                     status.textContent = '完了';
                     progressFill.style.width = '100%';
-                    // ダウンロードを自動で開始
-                    setTimeout(() => {
-                        window.location.href = data.downloadUrl;
-                    }, 1000);
+
+                    // 変換されたファイルをダウンロード
+                    data.files.forEach(file => {
+                        const link = document.createElement('a');
+                        link.href = `data:image/webp;base64,${file.data}`;
+                        link.download = file.name;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    });
+
+                    addLog(`📥 ${data.files.length}個のファイルをダウンロードしました`, 'success');
                 } else {
                     addLog(`❌ エラー: ${data.error}`, 'error');
                     status.textContent = 'エラー';
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 addLog(`❌ 通信エラー: ${error.message}`, 'error');
                 status.textContent = 'エラー';
-            });
+            }
         }
 
         // フォルダも含めて全ファイルを取得

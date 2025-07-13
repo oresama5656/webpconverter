@@ -1,0 +1,10 @@
+{
+  "name": "webp-converter-functions",
+  "version": "1.0.0",
+  "description": "WebP変換ツールのNetlify Functions",
+  "main": "convert.js",
+  "dependencies": {
+    "sharp": "^0.32.6",
+    "archiver": "^7.0.1"
+  }
+} 
