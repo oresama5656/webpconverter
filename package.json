@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "echo 'Build completed'"
+    "build": "echo 'Build completed'",
+    "simple": "node simple-web-app.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
