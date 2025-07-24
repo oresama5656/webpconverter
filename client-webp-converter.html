@@ -1004,6 +1004,7 @@
         let uploadedFiles = [];
         let fileStructure = {}; // フォルダ構造を保持
         let previews = {}; // プレビューデータを保持
+        let previewStats = {}; // 各ファイルの実際のプレビュー統計を保持
         let currentFileIndex = 0;
         
         // ファイル入力の設定
@@ -1169,7 +1170,7 @@
 
         // ファイル選択ボタンのクリックイベント
         uploadArea.addEventListener('click', function(e) {
-            if (e.target === uploadArea || e.target === uploadIcon || e.target === uploadText || e.target === uploadHint) {
+            if (e.target === uploadArea || e.target === uploadIcon || e.target === uploadText || e.target === uploadHint || e.target === selectBtn) {
                 if (currentMode === 'file') {
                     fileInput.click();
                 } else {
@@ -1501,6 +1502,15 @@
                         const originalSize = (file.size / 1024).toFixed(1);
                         const compression = (((file.size - blob.size) / file.size) * 100).toFixed(1);
                         
+                        // プレビュー統計を保存（ファイル名をキーとして使用）
+                        previewStats[file.name] = {
+                            originalSize: file.size,
+                            webpSize: blob.size,
+                            compression: parseFloat(compression),
+                            quality: quality,
+                            scaleRatio: scaleRatio
+                        };
+                        
                         document.getElementById('convertedSize').textContent = webpSize + 'KB (推定)';
                         document.getElementById('convertedDimensions').textContent = `${Math.round(originalImg.width * scaleRatio)} × ${Math.round(originalImg.height * scaleRatio)}`;
                         document.getElementById('compressionRate').textContent = compression + '%';
@@ -1558,7 +1568,8 @@
         function calculateStats() {
             const totalFiles = uploadedFiles.length;
             let totalOriginalSize = 0;
-            let estimatedWebpSize = 0;
+            let totalWebpSize = 0;
+            let filesWithPreview = 0;
             const formatCount = {};
             
             uploadedFiles.forEach(file => {
@@ -1568,18 +1579,42 @@
                 const ext = file.name.split('.').pop().toLowerCase();
                 formatCount[ext] = (formatCount[ext] || 0) + 1;
                 
-                // WebPサイズを推定（実際の品質設定を考慮）
-                const quality = qualitySlider.value / 100;
-                estimatedWebpSize += file.size * quality * 0.7; // 概算
+                // 実際のプレビュー結果がある場合はそれを使用
+                if (previewStats[file.name]) {
+                    totalWebpSize += previewStats[file.name].webpSize;
+                    filesWithPreview++;
+                } else {
+                    // プレビューがない場合は改良された推定を使用
+                    const quality = qualitySlider.value / 100;
+                    
+                    // ファイル形式別の基本圧縮率（より現実的な値）
+                    const baseCompressionRates = {
+                        'png': 0.1,    // PNGは通常90%削減
+                        'jpg': 0.3,    // JPEGは通常70%削減  
+                        'jpeg': 0.3,
+                        'gif': 0.15,   // GIFは通常85%削減
+                        'bmp': 0.05,   // BMPは通常95%削減
+                        'webp': 0.8    // 既にWebPの場合
+                    };
+                    
+                    const baseRate = baseCompressionRates[ext] || 0.25;
+                    const qualityFactor = Math.max(0.3, quality * 0.7 + 0.3);
+                    totalWebpSize += file.size * baseRate * qualityFactor;
+                }
             });
             
-            const totalReduction = ((totalOriginalSize - estimatedWebpSize) / totalOriginalSize * 100).toFixed(1);
+            const totalReduction = ((totalOriginalSize - totalWebpSize) / totalOriginalSize * 100).toFixed(1);
             const estimatedTime = Math.ceil(totalFiles * 0.5); // ファイルあたり0.5秒と仮定
             
             document.getElementById('totalFiles').textContent = `${totalFiles}件`;
             document.getElementById('totalReduction').textContent = 
-                `${(totalOriginalSize / 1024 / 1024).toFixed(1)}MB → ${(estimatedWebpSize / 1024 / 1024).toFixed(1)}MB (${totalReduction}%削減)`;
+                `${(totalOriginalSize / 1024 / 1024).toFixed(1)}MB → ${(totalWebpSize / 1024 / 1024).toFixed(1)}MB (${totalReduction}%削減)`;
             document.getElementById('estimatedTime').textContent = `約${estimatedTime}秒`;
+            
+            // デバッグ情報（実際のプレビューがあるファイル数も表示）
+            if (filesWithPreview > 0) {
+                console.log(`統計: ${filesWithPreview}/${totalFiles}ファイルで実際のプレビューデータを使用`);
+            }
             
             // ファイル形式別統計
             const formatBreakdown = document.getElementById('formatBreakdown');
