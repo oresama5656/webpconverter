@@ -11,6 +11,17 @@
     "resize": "node app.js",
     "pkg": "pkg app.js --targets node18-win-x64 --output webp-converter.exe"
   },
+  "pkg": {
+    "assets": [
+      "resize-ui.html",
+      "*.html",
+      "*.css",
+      "*.js"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ]
+  },
   "dependencies": {
     "archiver": "^7.0.1",
     "cors": "^2.8.5",

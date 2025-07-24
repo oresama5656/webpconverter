@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebP変換ツール（クライアントサイド完結）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+            color: #333;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.drag-over {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .upload-text {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .upload-hint {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-container {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-info {
+            flex-grow: 1;
+        }
+
+        .result-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .result-size {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .upload-area {
+                padding: 30px 20px;
+            }
+
+            .result-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .download-btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ WebP変換ツール</h1>
+        <p class="subtitle">サーバー不要！ブラウザだけで画像をWebPに変換</p>
+
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">ここに画像ファイルをドロップ<br>またはクリックして選択</div>
+            <div class="upload-hint">PNG, JPEG, JPG, GIF, BMP対応 | 複数ファイル選択可能</div>
+            <input type="file" id="fileInput" multiple accept="image/*">
+            <button class="btn">ファイルを選択</button>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">変換中...</div>
+        </div>
+
+        <div class="results" id="results">
+            <h3>変換結果</h3>
+            <div id="resultsList"></div>
+            <button class="btn" onclick="downloadAll()" id="downloadAllBtn" style="display: none;">
+                すべてダウンロード
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let convertedFiles = [];
+        
+        // ファイル入力の設定
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.querySelector('.upload-area');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const results = document.getElementById('results');
+        const resultsList = document.getElementById('resultsList');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+        // ドラッグ&ドロップの設定
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // ファイル処理の開始
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            // 結果をリセット
+            convertedFiles = [];
+            resultsList.innerHTML = '';
+            results.style.display = 'none';
+            downloadAllBtn.style.display = 'none';
+
+            // 進行状況を表示
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = `0 / ${files.length} ファイル変換完了`;
+
+            // ファイルを順次変換
+            convertFiles(Array.from(files));
+        }
+
+        // ファイル変換の実行
+        async function convertFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                try {
+                    // 画像ファイルかチェック
+                    if (!file.type.startsWith('image/')) {
+                        showError(`${file.name} は画像ファイルではありません`);
+                        continue;
+                    }
+
+                    const webpBlob = await convertToWebP(file);
+                    const originalSize = (file.size / 1024).toFixed(1);
+                    const webpSize = (webpBlob.size / 1024).toFixed(1);
+                    const compression = (((file.size - webpBlob.size) / file.size) * 100).toFixed(1);
+
+                    const convertedFile = {
+                        name: getWebPFilename(file.name),
+                        blob: webpBlob,
+                        originalSize: originalSize,
+                        webpSize: webpSize,
+                        compression: compression
+                    };
+
+                    convertedFiles.push(convertedFile);
+                    addResultItem(convertedFile);
+
+                    // 進行状況を更新
+                    const progress = ((i + 1) / files.length) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    progressText.textContent = `${i + 1} / ${files.length} ファイル変換完了`;
+
+                } catch (error) {
+                    console.error('変換エラー:', error);
+                    showError(`${file.name} の変換に失敗しました: ${error.message}`);
+                }
+            }
+
+            // 変換完了
+            if (convertedFiles.length > 0) {
+                progressText.textContent = `変換完了！ ${convertedFiles.length}ファイル`;
+                results.style.display = 'block';
+                if (convertedFiles.length > 1) {
+                    downloadAllBtn.style.display = 'inline-block';
+                }
+                showSuccess(`${convertedFiles.length}個のファイルをWebPに変換しました`);
+            }
+
+            // 3秒後に進行状況を非表示
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 3000);
+        }
+
+        // WebP変換の実行
+        function convertToWebP(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                img.onload = function() {
+                    // キャンバスサイズを画像に合わせる
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    // 画像をキャンバスに描画
+                    ctx.drawImage(img, 0, 0);
+
+                    // WebPとして出力
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('WebP変換に失敗しました'));
+                        }
+                    }, 'image/webp', 0.85); // 品質85%
+                };
+
+                img.onerror = function() {
+                    reject(new Error('画像の読み込みに失敗しました'));
+                };
+
+                // FileReaderで画像を読み込み
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                };
+                reader.onerror = function() {
+                    reject(new Error('ファイルの読み込みに失敗しました'));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ファイル名の変換（拡張子を.webpに）
+        function getWebPFilename(originalName) {
+            const lastDotIndex = originalName.lastIndexOf('.');
+            if (lastDotIndex === -1) {
+                return originalName + '.webp';
+            }
+            return originalName.substring(0, lastDotIndex) + '.webp';
+        }
+
+        // 結果アイテムの追加
+        function addResultItem(file) {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            
+            resultItem.innerHTML = `
+                <div class="result-info">
+                    <div class="result-name">${file.name}</div>
+                    <div class="result-size">
+                        ${file.originalSize}KB → ${file.webpSize}KB 
+                        (${file.compression}% 削減)
+                    </div>
+                </div>
+                <button class="download-btn" onclick="downloadFile('${file.name}')">
+                    ダウンロード
+                </button>
+            `;
+
+            resultsList.appendChild(resultItem);
+        }
+
+        // 個別ダウンロード
+        function downloadFile(filename) {
+            const file = convertedFiles.find(f => f.name === filename);
+            if (file) {
+                const url = URL.createObjectURL(file.blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = file.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // 全体ダウンロード（ZIP形式ではなく個別に連続ダウンロード）
+        function downloadAll() {
+            convertedFiles.forEach((file, index) => {
+                setTimeout(() => {
+                    downloadFile(file.name);
+                }, index * 500); // 0.5秒間隔でダウンロード
+            });
+        }
+
+        // エラー表示
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            resultsList.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // 成功表示
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = message;
+            resultsList.insertBefore(successDiv, resultsList.firstChild);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // ページ読み込み完了時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('WebP変換ツール準備完了');
+        });
+    </script>
+</body>
+</html>
