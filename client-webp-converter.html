@@ -437,6 +437,266 @@
             border-top: 1px solid #e9ecef;
         }
 
+        .upload-mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn {
+            padding: 10px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            background: white;
+            color: #495057;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .preview-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .preview-container h3 {
+            margin-bottom: 20px;
+            color: #495057;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .view-mode-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .view-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            color: #666;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .zoom-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zoom-control label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .file-tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .file-tabs {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            flex-grow: 1;
+            padding: 5px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            max-width: 70%;
+        }
+
+        .file-tab {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            color: #666;
+            font-size: 0.85em;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .file-tab:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .file-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .batch-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            background: white;
+            color: #666;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .image-comparison {
+            display: flex;
+            gap: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .image-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-panel h4 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .image-container img,
+        .image-container canvas {
+            max-width: 100%;
+            max-height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .image-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: center;
+        }
+
+        .info-item {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .info-item.compression {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .stats-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stats-panel h4 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.2em;
+        }
+
+        .stats-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-item label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .stat-item span {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .file-browser {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -483,6 +743,38 @@
                 text-align: center;
             }
 
+            .upload-mode-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .mode-btn {
+                text-align: center;
+            }
+
+            .preview-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .file-tabs-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .file-tabs {
+                max-width: 100%;
+            }
+
+            .image-comparison {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stats-content {
+                grid-template-columns: 1fr;
+            }
+
             .result-item {
                 flex-direction: column;
                 align-items: stretch;
@@ -500,12 +792,18 @@
         <h1>🖼️ WebP変換ツール</h1>
         <p class="subtitle">サーバー不要！ブラウザだけで画像をWebPに変換</p>
 
-        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-icon">📁</div>
-            <div class="upload-text">ここに画像ファイルをドロップ<br>またはクリックして選択</div>
-            <div class="upload-hint">PNG, JPEG, JPG, GIF, BMP対応 | 複数ファイル選択可能</div>
-            <input type="file" id="fileInput" multiple accept="image/*">
-            <button class="btn">ファイルを選択</button>
+        <div class="upload-mode-selector">
+            <button class="mode-btn active" id="fileModeBtn" data-mode="file">📄 ファイル選択</button>
+            <button class="mode-btn" id="folderModeBtn" data-mode="folder">📁 フォルダ選択</button>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon" id="uploadIcon">📁</div>
+            <div class="upload-text" id="uploadText">ここに画像ファイルをドロップ<br>またはクリックして選択</div>
+            <div class="upload-hint" id="uploadHint">PNG, JPEG, JPG, GIF, BMP対応 | 複数ファイル選択可能</div>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display: none;">
+            <input type="file" id="folderInput" multiple accept="image/*" webkitdirectory style="display: none;">
+            <button class="btn" id="selectBtn">ファイルを選択</button>
         </div>
 
         <div class="settings-panel">
@@ -602,6 +900,88 @@
             </div>
         </div>
 
+        <div class="preview-container" id="previewContainer" style="display: none;">
+            <h3>🔍 プレビュー</h3>
+            
+            <div class="preview-controls">
+                <div class="view-mode-selector">
+                    <button class="view-btn active" data-view="both">両方表示</button>
+                    <button class="view-btn" data-view="original">元画像</button>
+                    <button class="view-btn" data-view="converted">変換後</button>
+                </div>
+                <div class="zoom-control">
+                    <label>ズーム</label>
+                    <input type="range" id="zoomSlider" min="25" max="200" value="100" class="slider">
+                    <span class="slider-value" id="zoomValue">100%</span>
+                </div>
+            </div>
+
+            <div class="file-tabs-container">
+                <div class="file-tabs" id="fileTabs">
+                    <!-- ファイルタブが動的に生成される -->
+                </div>
+                <div class="batch-controls">
+                    <button class="btn-small" id="generateAllPreviewsBtn">全件プレビュー生成</button>
+                    <button class="btn-small" id="showStatsBtn">統計表示</button>
+                    <button class="btn" id="startConversionBtn" onclick="startConversion()">変換開始</button>
+                </div>
+            </div>
+
+            <div class="preview-content">
+                <div class="file-browser" id="fileBrowser" style="display: none;">
+                    <!-- フォルダ階層表示 -->
+                </div>
+                
+                <div class="preview-display" id="previewDisplay">
+                    <div class="image-comparison">
+                        <div class="image-panel original-panel">
+                            <h4>元画像</h4>
+                            <div class="image-container">
+                                <img id="originalImage" alt="元画像">
+                                <div class="image-info" id="originalInfo">
+                                    <div class="info-item">サイズ: <span id="originalSize">-</span></div>
+                                    <div class="info-item">解像度: <span id="originalDimensions">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="image-panel converted-panel">
+                            <h4>変換後</h4>
+                            <div class="image-container">
+                                <canvas id="convertedCanvas"></canvas>
+                                <div class="image-info" id="convertedInfo">
+                                    <div class="info-item">サイズ: <span id="convertedSize">-</span></div>
+                                    <div class="info-item">解像度: <span id="convertedDimensions">-</span></div>
+                                    <div class="info-item compression">削減率: <span id="compressionRate">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-panel" id="statsPanel" style="display: none;">
+                    <h4>📊 全体統計</h4>
+                    <div class="stats-content">
+                        <div class="stat-item">
+                            <label>総ファイル数</label>
+                            <span id="totalFiles">0件</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>総容量削減</label>
+                            <span id="totalReduction">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <label>処理予想時間</label>
+                            <span id="estimatedTime">-</span>
+                        </div>
+                        <div class="format-breakdown" id="formatBreakdown">
+                            <!-- ファイル形式別の統計 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="progress-container" id="progressContainer">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -620,16 +1000,42 @@
 
     <script>
         let convertedFiles = [];
+        let currentMode = 'file'; // 'file' or 'folder'
+        let uploadedFiles = [];
+        let fileStructure = {}; // フォルダ構造を保持
+        let previews = {}; // プレビューデータを保持
+        let currentFileIndex = 0;
         
         // ファイル入力の設定
         const fileInput = document.getElementById('fileInput');
-        const uploadArea = document.querySelector('.upload-area');
+        const folderInput = document.getElementById('folderInput');
+        const uploadArea = document.getElementById('uploadArea');
         const progressContainer = document.getElementById('progressContainer');
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
         const results = document.getElementById('results');
         const resultsList = document.getElementById('resultsList');
         const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+        // モード切り替え要素
+        const fileModeBtn = document.getElementById('fileModeBtn');
+        const folderModeBtn = document.getElementById('folderModeBtn');
+        const uploadIcon = document.getElementById('uploadIcon');
+        const uploadText = document.getElementById('uploadText');
+        const uploadHint = document.getElementById('uploadHint');
+        const selectBtn = document.getElementById('selectBtn');
+
+        // プレビュー関連要素
+        const previewContainer = document.getElementById('previewContainer');
+        const fileTabs = document.getElementById('fileTabs');
+        const previewDisplay = document.getElementById('previewDisplay');
+        const statsPanel = document.getElementById('statsPanel');
+        const originalImage = document.getElementById('originalImage');
+        const convertedCanvas = document.getElementById('convertedCanvas');
+        const zoomSlider = document.getElementById('zoomSlider');
+        const zoomValue = document.getElementById('zoomValue');
+        const generateAllPreviewsBtn = document.getElementById('generateAllPreviewsBtn');
+        const showStatsBtn = document.getElementById('showStatsBtn');
 
         // 設定スライダーの初期化
         const qualitySlider = document.getElementById('qualitySlider');
@@ -660,19 +1066,41 @@
             maximum: { scale800: 3.0, scale1200: 2.5, custom: 3.0, description: '最大: 最高画質、最大拡大率' }
         };
 
-        // スライダーイベントリスナー
+        // スライダーイベントリスナー（リアルタイム更新付き）
+        let updateTimeout;
+        
         qualitySlider.addEventListener('input', function() {
             qualityValue.textContent = this.value + '%';
+            debouncedPreviewUpdate();
         });
 
         scaleSlider.addEventListener('input', function() {
             scaleValue.textContent = this.value + '%';
+            debouncedPreviewUpdate();
         });
 
         customScaleSlider.addEventListener('input', function() {
             const scale = (this.value / 100).toFixed(1);
             customScaleValue.textContent = scale + '倍';
+            debouncedPreviewUpdate();
         });
+
+        // デバウンス処理付きプレビュー更新
+        function debouncedPreviewUpdate() {
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(() => {
+                if (uploadedFiles.length > 0 && currentFileIndex >= 0) {
+                    generatePreview(currentFileIndex);
+                }
+            }, 300);
+        }
+
+        // 画質向上設定の変更時もプレビュー更新
+        enhanceCheck.addEventListener('change', debouncedPreviewUpdate);
+        enhanceModeSelect.addEventListener('change', debouncedPreviewUpdate);
+        scale800Select.addEventListener('change', debouncedPreviewUpdate);
+        scale1200Select.addEventListener('change', debouncedPreviewUpdate);
+        algorithmSelect.addEventListener('change', debouncedPreviewUpdate);
 
         // 画質向上チェックボックス
         enhanceCheck.addEventListener('change', function() {
@@ -711,6 +1139,62 @@
             });
         });
 
+        // モード切り替え機能
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // ボタンの状態更新
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (mode === 'file') {
+                fileModeBtn.classList.add('active');
+                uploadIcon.textContent = '📁';
+                uploadText.innerHTML = 'ここに画像ファイルをドロップ<br>またはクリックして選択';
+                uploadHint.textContent = 'PNG, JPEG, JPG, GIF, BMP対応 | 複数ファイル選択可能';
+                selectBtn.textContent = 'ファイルを選択';
+            } else {
+                folderModeBtn.classList.add('active');
+                uploadIcon.textContent = '📂';
+                uploadText.innerHTML = 'ここにフォルダをドロップ<br>またはクリックして選択';
+                uploadHint.textContent = 'フォルダ内の画像ファイルを一括処理 | サブフォルダも含む';
+                selectBtn.textContent = 'フォルダを選択';
+            }
+        }
+
+        // モード切り替えイベント
+        fileModeBtn.addEventListener('click', () => switchMode('file'));
+        folderModeBtn.addEventListener('click', () => switchMode('folder'));
+
+        // ファイル選択ボタンのクリックイベント
+        uploadArea.addEventListener('click', function(e) {
+            if (e.target === uploadArea || e.target === uploadIcon || e.target === uploadText || e.target === uploadHint) {
+                if (currentMode === 'file') {
+                    fileInput.click();
+                } else {
+                    folderInput.click();
+                }
+            }
+        });
+
+        // ズームスライダー
+        zoomSlider.addEventListener('input', function() {
+            zoomValue.textContent = this.value + '%';
+            applyZoom(this.value / 100);
+        });
+
+        // 表示モード切り替え
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const view = this.dataset.view;
+                toggleViewMode(view);
+            });
+        });
+
         // ドラッグ&ドロップの設定
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -725,35 +1209,424 @@
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            handleFiles(files);
+            
+            const items = e.dataTransfer.items;
+            if (items) {
+                handleDroppedItems(items);
+            } else {
+                handleFiles(e.dataTransfer.files);
+            }
         });
 
         fileInput.addEventListener('change', (e) => {
             handleFiles(e.target.files);
         });
 
+        folderInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // ドロップされたアイテムの処理
+        async function handleDroppedItems(items) {
+            const files = [];
+            
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.kind === 'file') {
+                    const entry = item.webkitGetAsEntry();
+                    if (entry) {
+                        if (entry.isFile) {
+                            const file = item.getAsFile();
+                            if (file && file.type.startsWith('image/')) {
+                                files.push(file);
+                            }
+                        } else if (entry.isDirectory) {
+                            const folderFiles = await traverseDirectory(entry);
+                            files.push(...folderFiles);
+                        }
+                    }
+                }
+            }
+            
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        }
+
+        // ディレクトリ再帰探索
+        function traverseDirectory(entry, path = '') {
+            return new Promise((resolve) => {
+                const files = [];
+                
+                if (entry.isFile) {
+                    entry.file((file) => {
+                        if (file.type.startsWith('image/')) {
+                            file.relativePath = path + file.name;
+                            files.push(file);
+                        }
+                        resolve(files);
+                    });
+                } else if (entry.isDirectory) {
+                    const dirReader = entry.createReader();
+                    dirReader.readEntries(async (entries) => {
+                        for (const childEntry of entries) {
+                            const childFiles = await traverseDirectory(childEntry, path + entry.name + '/');
+                            files.push(...childFiles);
+                        }
+                        resolve(files);
+                    });
+                }
+            });
+        }
+
         // ファイル処理の開始
         function handleFiles(files) {
             if (files.length === 0) return;
+
+            // ファイル配列を保存
+            uploadedFiles = Array.from(files);
+            
+            // フォルダ構造を解析
+            analyzeFileStructure(uploadedFiles);
+            
+            // プレビューエリアを表示
+            previewContainer.style.display = 'block';
+            
+            // ファイルタブを生成
+            generateFileTabs();
+            
+            // 最初のファイルのプレビューを生成
+            if (uploadedFiles.length > 0) {
+                generatePreview(0);
+            }
 
             // 結果をリセット
             convertedFiles = [];
             resultsList.innerHTML = '';
             results.style.display = 'none';
             downloadAllBtn.style.display = 'none';
+        }
 
+        // ファイル構造解析
+        function analyzeFileStructure(files) {
+            fileStructure = { folders: {}, files: [] };
+            
+            files.forEach((file, index) => {
+                const path = file.relativePath || file.webkitRelativePath || file.name;
+                const pathParts = path.split('/');
+                
+                if (pathParts.length > 1) {
+                    // フォルダ内のファイル
+                    let current = fileStructure.folders;
+                    for (let i = 0; i < pathParts.length - 1; i++) {
+                        const folderName = pathParts[i];
+                        if (!current[folderName]) {
+                            current[folderName] = { folders: {}, files: [] };
+                        }
+                        current = current[folderName];
+                    }
+                    current.files.push({ file, index, name: pathParts[pathParts.length - 1] });
+                } else {
+                    // ルートレベルのファイル
+                    fileStructure.files.push({ file, index, name: file.name });
+                }
+            });
+        }
+
+        // ファイルタブ生成
+        function generateFileTabs() {
+            fileTabs.innerHTML = '';
+            
+            // 統計タブを追加
+            const statsTab = document.createElement('div');
+            statsTab.className = 'file-tab';
+            statsTab.textContent = '📊 統計';
+            statsTab.addEventListener('click', () => showStats());
+            fileTabs.appendChild(statsTab);
+            
+            // 各ファイルのタブを追加
+            uploadedFiles.forEach((file, index) => {
+                const tab = document.createElement('div');
+                tab.className = 'file-tab';
+                if (index === 0) tab.classList.add('active');
+                
+                const fileName = file.name.length > 15 ? 
+                    file.name.substring(0, 12) + '...' : file.name;
+                tab.textContent = fileName;
+                tab.title = file.name;
+                
+                tab.addEventListener('click', () => {
+                    selectFileTab(index);
+                    generatePreview(index);
+                });
+                
+                fileTabs.appendChild(tab);
+            });
+        }
+
+        // ファイルタブ選択
+        function selectFileTab(index) {
+            currentFileIndex = index;
+            
+            document.querySelectorAll('.file-tab').forEach((tab, i) => {
+                tab.classList.remove('active');
+                if (i === index + 1) { // +1 because of stats tab
+                    tab.classList.add('active');
+                }
+            });
+            
+            // 統計パネルを非表示
+            statsPanel.style.display = 'none';
+            previewDisplay.style.display = 'block';
+        }
+
+        // プレビュー生成（軽量版）
+        async function generatePreview(index) {
+            const file = uploadedFiles[index];
+            if (!file) return;
+            
+            try {
+                // 元画像を表示
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImage.src = e.target.result;
+                    
+                    // 画像の詳細情報を表示
+                    const img = new Image();
+                    img.onload = function() {
+                        document.getElementById('originalSize').textContent = (file.size / 1024).toFixed(1) + 'KB';
+                        document.getElementById('originalDimensions').textContent = `${img.width} × ${img.height}`;
+                        
+                        // 変換後のプレビューを生成
+                        generateConvertedPreview(file, img);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                
+            } catch (error) {
+                console.error('プレビュー生成エラー:', error);
+            }
+        }
+
+        // 変換後プレビュー生成（軽量版）
+        async function generateConvertedPreview(file, originalImg) {
+            try {
+                // プレビュー用に小さいサイズで変換
+                const maxPreviewSize = 400;
+                const scale = Math.min(maxPreviewSize / originalImg.width, maxPreviewSize / originalImg.height, 1);
+                
+                const canvas = convertedCanvas;
+                const ctx = canvas.getContext('2d');
+                
+                const previewWidth = Math.round(originalImg.width * scale);
+                const previewHeight = Math.round(originalImg.height * scale);
+                
+                canvas.width = previewWidth;
+                canvas.height = previewHeight;
+                
+                // 現在の設定を取得
+                const quality = qualitySlider.value / 100;
+                const scaleRatio = scaleSlider.value / 100;
+                const enhance = enhanceCheck.checked;
+                
+                // 画質向上処理
+                let finalWidth = previewWidth;
+                let finalHeight = previewHeight;
+                
+                if (enhance) {
+                    const enhanceScale = getEnhanceScaleFactor(originalImg.width, originalImg.height);
+                    if (enhanceScale > 1.0) {
+                        // 一時的に拡大処理
+                        const tempCanvas = document.createElement('canvas');
+                        const tempCtx = tempCanvas.getContext('2d');
+                        
+                        tempCanvas.width = previewWidth * enhanceScale;
+                        tempCanvas.height = previewHeight * enhanceScale;
+                        
+                        const algorithm = algorithmSelect.value;
+                        tempCtx.imageSmoothingEnabled = algorithm !== 'low';
+                        if (tempCtx.imageSmoothingEnabled) {
+                            tempCtx.imageSmoothingQuality = algorithm;
+                        }
+                        tempCtx.drawImage(originalImg, 0, 0, tempCanvas.width, tempCanvas.height);
+                        
+                        // 最終サイズを計算
+                        finalWidth = Math.round(previewWidth * scaleRatio);
+                        finalHeight = Math.round(previewHeight * scaleRatio);
+                        
+                        canvas.width = finalWidth;
+                        canvas.height = finalHeight;
+                        
+                        ctx.imageSmoothingEnabled = algorithm !== 'low';
+                        if (ctx.imageSmoothingEnabled) {
+                            ctx.imageSmoothingQuality = algorithm;
+                        }
+                        ctx.drawImage(tempCanvas, 0, 0, finalWidth, finalHeight);
+                    } else {
+                        // 通常処理
+                        finalWidth = Math.round(previewWidth * scaleRatio);
+                        finalHeight = Math.round(previewHeight * scaleRatio);
+                        
+                        canvas.width = finalWidth;
+                        canvas.height = finalHeight;
+                        
+                        const algorithm = algorithmSelect.value;
+                        ctx.imageSmoothingEnabled = algorithm !== 'low';
+                        if (ctx.imageSmoothingEnabled) {
+                            ctx.imageSmoothingQuality = algorithm;
+                        }
+                        ctx.drawImage(originalImg, 0, 0, finalWidth, finalHeight);
+                    }
+                } else {
+                    // 画質向上なし
+                    finalWidth = Math.round(previewWidth * scaleRatio);
+                    finalHeight = Math.round(previewHeight * scaleRatio);
+                    
+                    canvas.width = finalWidth;
+                    canvas.height = finalHeight;
+                    
+                    const algorithm = algorithmSelect.value;
+                    ctx.imageSmoothingEnabled = algorithm !== 'low';
+                    if (ctx.imageSmoothingEnabled) {
+                        ctx.imageSmoothingQuality = algorithm;
+                    }
+                    ctx.drawImage(originalImg, 0, 0, finalWidth, finalHeight);
+                }
+                
+                // WebPサイズを推定
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const webpSize = (blob.size / 1024).toFixed(1);
+                        const originalSize = (file.size / 1024).toFixed(1);
+                        const compression = (((file.size - blob.size) / file.size) * 100).toFixed(1);
+                        
+                        document.getElementById('convertedSize').textContent = webpSize + 'KB (推定)';
+                        document.getElementById('convertedDimensions').textContent = `${Math.round(originalImg.width * scaleRatio)} × ${Math.round(originalImg.height * scaleRatio)}`;
+                        document.getElementById('compressionRate').textContent = compression + '%';
+                    }
+                }, 'image/webp', quality);
+                
+            } catch (error) {
+                console.error('変換プレビューエラー:', error);
+            }
+        }
+
+        // ズーム適用
+        function applyZoom(zoomLevel) {
+            const images = document.querySelectorAll('.image-container img, .image-container canvas');
+            images.forEach(img => {
+                img.style.transform = `scale(${zoomLevel})`;
+            });
+        }
+
+        // 表示モード切り替え
+        function toggleViewMode(view) {
+            const originalPanel = document.querySelector('.original-panel');
+            const convertedPanel = document.querySelector('.converted-panel');
+            
+            switch (view) {
+                case 'both':
+                    originalPanel.style.display = 'flex';
+                    convertedPanel.style.display = 'flex';
+                    break;
+                case 'original':
+                    originalPanel.style.display = 'flex';
+                    convertedPanel.style.display = 'none';
+                    break;
+                case 'converted':
+                    originalPanel.style.display = 'none';
+                    convertedPanel.style.display = 'flex';
+                    break;
+            }
+        }
+
+        // 統計表示
+        function showStats() {
+            document.querySelectorAll('.file-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector('.file-tab').classList.add('active'); // 統計タブ
+            
+            previewDisplay.style.display = 'none';
+            statsPanel.style.display = 'block';
+            
+            calculateStats();
+        }
+
+        // 統計計算
+        function calculateStats() {
+            const totalFiles = uploadedFiles.length;
+            let totalOriginalSize = 0;
+            let estimatedWebpSize = 0;
+            const formatCount = {};
+            
+            uploadedFiles.forEach(file => {
+                totalOriginalSize += file.size;
+                
+                // 拡張子別カウント
+                const ext = file.name.split('.').pop().toLowerCase();
+                formatCount[ext] = (formatCount[ext] || 0) + 1;
+                
+                // WebPサイズを推定（実際の品質設定を考慮）
+                const quality = qualitySlider.value / 100;
+                estimatedWebpSize += file.size * quality * 0.7; // 概算
+            });
+            
+            const totalReduction = ((totalOriginalSize - estimatedWebpSize) / totalOriginalSize * 100).toFixed(1);
+            const estimatedTime = Math.ceil(totalFiles * 0.5); // ファイルあたり0.5秒と仮定
+            
+            document.getElementById('totalFiles').textContent = `${totalFiles}件`;
+            document.getElementById('totalReduction').textContent = 
+                `${(totalOriginalSize / 1024 / 1024).toFixed(1)}MB → ${(estimatedWebpSize / 1024 / 1024).toFixed(1)}MB (${totalReduction}%削減)`;
+            document.getElementById('estimatedTime').textContent = `約${estimatedTime}秒`;
+            
+            // ファイル形式別統計
+            const formatBreakdown = document.getElementById('formatBreakdown');
+            formatBreakdown.innerHTML = '<h5>ファイル形式別</h5>';
+            
+            Object.entries(formatCount).forEach(([ext, count]) => {
+                const div = document.createElement('div');
+                div.className = 'stat-item';
+                div.innerHTML = `<label>${ext.toUpperCase()}</label><span>${count}件</span>`;
+                formatBreakdown.appendChild(div);
+            });
+        }
+
+        // バッチ処理ボタンのイベント
+        generateAllPreviewsBtn.addEventListener('click', async function() {
+            this.disabled = true;
+            this.textContent = '生成中...';
+            
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                await generatePreview(i);
+                await new Promise(resolve => setTimeout(resolve, 100)); // 100ms間隔
+            }
+            
+            this.disabled = false;
+            this.textContent = '全件プレビュー生成';
+            showSuccess('全ファイルのプレビューを生成しました');
+        });
+
+        showStatsBtn.addEventListener('click', showStats);
+
+        // 変換開始ボタン（元の機能を流用）
+        function startConversion() {
+            if (uploadedFiles.length === 0) {
+                showError('変換するファイルがありません');
+                return;
+            }
+            
+            convertFiles(uploadedFiles);
+        }
+
+        // ファイル変換の実行
+        async function convertFiles(files) {
             // 進行状況を表示
             progressContainer.style.display = 'block';
             progressFill.style.width = '0%';
             progressText.textContent = `0 / ${files.length} ファイル変換完了`;
 
-            // ファイルを順次変換
-            convertFiles(Array.from(files));
-        }
-
-        // ファイル変換の実行
-        async function convertFiles(files) {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 
