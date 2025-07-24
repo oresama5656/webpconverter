@@ -159,6 +159,13 @@
         .result-size {
             font-size: 0.9em;
             color: #666;
+            margin-bottom: 3px;
+        }
+
+        .result-settings {
+            font-size: 0.8em;
+            color: #888;
+            font-style: italic;
         }
 
         .download-btn {
@@ -193,6 +200,243 @@
             margin-bottom: 10px;
         }
 
+        .settings-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+
+        .settings-panel h3 {
+            margin-bottom: 20px;
+            color: #495057;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+        }
+
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .slider-hint {
+            font-size: 0.85em;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .checkbox-label {
+            display: flex !important;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkmark:after {
+            content: "✓";
+            position: absolute;
+            left: 3px;
+            top: -2px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .enhance-options {
+            margin-top: 15px;
+            margin-left: 30px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .enhance-options.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .enhance-mode {
+            margin-bottom: 15px;
+        }
+
+        .mode-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9em;
+            margin-top: 5px;
+            transition: border-color 0.2s ease;
+        }
+
+        .mode-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .enhance-setting {
+            margin-bottom: 15px;
+        }
+
+        .size-thresholds {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .threshold-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .threshold-item label {
+            display: block;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .scale-select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.85em;
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 8px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            background: white;
+            color: #495057;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preset-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .preset-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .preset-info {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .preset-description {
+            font-size: 0.85em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .enhance-algorithm {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -205,6 +449,38 @@
 
             .upload-area {
                 padding: 30px 20px;
+            }
+
+            .settings-panel {
+                padding: 20px;
+            }
+
+            .slider-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .slider-value {
+                text-align: left;
+            }
+
+            .enhance-options {
+                margin-left: 0;
+            }
+
+            .size-thresholds {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .preset-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .preset-btn {
+                text-align: center;
             }
 
             .result-item {
@@ -230,6 +506,100 @@
             <div class="upload-hint">PNG, JPEG, JPG, GIF, BMP対応 | 複数ファイル選択可能</div>
             <input type="file" id="fileInput" multiple accept="image/*">
             <button class="btn">ファイルを選択</button>
+        </div>
+
+        <div class="settings-panel">
+            <h3>🎛️ 変換設定</h3>
+            
+            <div class="setting-group">
+                <label for="qualitySlider">WebP品質</label>
+                <div class="slider-container">
+                    <input type="range" id="qualitySlider" min="25" max="100" value="85" class="slider">
+                    <span class="slider-value" id="qualityValue">85%</span>
+                </div>
+                <div class="slider-hint">高い値ほど高品質（ファイルサイズ大）</div>
+            </div>
+
+            <div class="setting-group">
+                <label for="scaleSlider">サイズ調整</label>
+                <div class="slider-container">
+                    <input type="range" id="scaleSlider" min="25" max="200" value="100" class="slider">
+                    <span class="slider-value" id="scaleValue">100%</span>
+                </div>
+                <div class="slider-hint">100%未満で縮小、100%超で拡大</div>
+            </div>
+
+            <div class="setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enhanceCheck" checked>
+                    <span class="checkmark"></span>
+                    画質向上（小さい画像を自動拡大）
+                </label>
+                <div class="slider-hint">小さい画像を高品質拡大してから変換</div>
+                
+                <div class="enhance-options" id="enhanceOptions">
+                    <div class="enhance-mode">
+                        <label>拡大モード</label>
+                        <select id="enhanceModeSelect" class="mode-select">
+                            <option value="auto">自動（サイズ基準）</option>
+                            <option value="custom">カスタム拡大率</option>
+                            <option value="preset">プリセット</option>
+                        </select>
+                    </div>
+
+                    <div class="enhance-setting auto-mode" id="autoModeSettings">
+                        <div class="size-thresholds">
+                            <div class="threshold-item">
+                                <label>800px以下</label>
+                                <select class="scale-select" id="scale800">
+                                    <option value="1.5">1.5倍</option>
+                                    <option value="2.0" selected>2.0倍</option>
+                                    <option value="2.5">2.5倍</option>
+                                    <option value="3.0">3.0倍</option>
+                                </select>
+                            </div>
+                            <div class="threshold-item">
+                                <label>1200px以下</label>
+                                <select class="scale-select" id="scale1200">
+                                    <option value="1.2">1.2倍</option>
+                                    <option value="1.5" selected>1.5倍</option>
+                                    <option value="2.0">2.0倍</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="enhance-setting custom-mode" id="customModeSettings" style="display: none;">
+                        <label for="customScaleSlider">カスタム拡大率</label>
+                        <div class="slider-container">
+                            <input type="range" id="customScaleSlider" min="100" max="400" value="200" class="slider">
+                            <span class="slider-value" id="customScaleValue">2.0倍</span>
+                        </div>
+                        <div class="slider-hint">すべての画像に同じ拡大率を適用</div>
+                    </div>
+
+                    <div class="enhance-setting preset-mode" id="presetModeSettings" style="display: none;">
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-preset="light">軽量</button>
+                            <button class="preset-btn active" data-preset="balanced">バランス</button>
+                            <button class="preset-btn" data-preset="quality">高画質</button>
+                            <button class="preset-btn" data-preset="maximum">最大</button>
+                        </div>
+                        <div class="preset-info" id="presetInfo">
+                            <div class="preset-description">バランス: 品質とファイルサイズのバランス重視</div>
+                        </div>
+                    </div>
+
+                    <div class="enhance-algorithm">
+                        <label>拡大アルゴリズム</label>
+                        <select id="algorithmSelect" class="mode-select">
+                            <option value="high" selected>高品質（推奨）</option>
+                            <option value="medium">標準</option>
+                            <option value="low">高速</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="progress-container" id="progressContainer">
@@ -260,6 +630,86 @@
         const results = document.getElementById('results');
         const resultsList = document.getElementById('resultsList');
         const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+        // 設定スライダーの初期化
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const scaleSlider = document.getElementById('scaleSlider');
+        const scaleValue = document.getElementById('scaleValue');
+        const enhanceCheck = document.getElementById('enhanceCheck');
+
+        // 画質向上オプションの要素
+        const enhanceOptions = document.getElementById('enhanceOptions');
+        const enhanceModeSelect = document.getElementById('enhanceModeSelect');
+        const autoModeSettings = document.getElementById('autoModeSettings');
+        const customModeSettings = document.getElementById('customModeSettings');
+        const presetModeSettings = document.getElementById('presetModeSettings');
+        const customScaleSlider = document.getElementById('customScaleSlider');
+        const customScaleValue = document.getElementById('customScaleValue');
+        const scale800Select = document.getElementById('scale800');
+        const scale1200Select = document.getElementById('scale1200');
+        const algorithmSelect = document.getElementById('algorithmSelect');
+        const presetButtons = document.querySelectorAll('.preset-btn');
+        const presetInfo = document.getElementById('presetInfo');
+
+        // プリセット設定
+        const presets = {
+            light: { scale800: 1.5, scale1200: 1.2, custom: 1.5, description: '軽量: ファイルサイズ重視、控えめな拡大' },
+            balanced: { scale800: 2.0, scale1200: 1.5, custom: 2.0, description: 'バランス: 品質とファイルサイズのバランス重視' },
+            quality: { scale800: 2.5, scale1200: 2.0, custom: 2.5, description: '高画質: 画質重視、大きめの拡大' },
+            maximum: { scale800: 3.0, scale1200: 2.5, custom: 3.0, description: '最大: 最高画質、最大拡大率' }
+        };
+
+        // スライダーイベントリスナー
+        qualitySlider.addEventListener('input', function() {
+            qualityValue.textContent = this.value + '%';
+        });
+
+        scaleSlider.addEventListener('input', function() {
+            scaleValue.textContent = this.value + '%';
+        });
+
+        customScaleSlider.addEventListener('input', function() {
+            const scale = (this.value / 100).toFixed(1);
+            customScaleValue.textContent = scale + '倍';
+        });
+
+        // 画質向上チェックボックス
+        enhanceCheck.addEventListener('change', function() {
+            if (this.checked) {
+                enhanceOptions.classList.remove('disabled');
+            } else {
+                enhanceOptions.classList.add('disabled');
+            }
+        });
+
+        // 拡大モード切り替え
+        enhanceModeSelect.addEventListener('change', function() {
+            const mode = this.value;
+            autoModeSettings.style.display = mode === 'auto' ? 'block' : 'none';
+            customModeSettings.style.display = mode === 'custom' ? 'block' : 'none';
+            presetModeSettings.style.display = mode === 'preset' ? 'block' : 'none';
+        });
+
+        // プリセットボタン
+        presetButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                presetButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const presetName = this.dataset.preset;
+                const preset = presets[presetName];
+                
+                // プリセット値を適用
+                scale800Select.value = preset.scale800;
+                scale1200Select.value = preset.scale1200;
+                customScaleSlider.value = preset.custom * 100;
+                customScaleValue.textContent = preset.custom + '倍';
+                
+                // 説明を更新
+                document.querySelector('.preset-description').textContent = preset.description;
+            });
+        });
 
         // ドラッグ&ドロップの設定
         uploadArea.addEventListener('dragover', (e) => {
@@ -318,13 +768,43 @@
                     const originalSize = (file.size / 1024).toFixed(1);
                     const webpSize = (webpBlob.size / 1024).toFixed(1);
                     const compression = (((file.size - webpBlob.size) / file.size) * 100).toFixed(1);
+                    
+                    // 詳細設定情報を追加
+                    const quality = qualitySlider.value;
+                    const scale = scaleSlider.value;
+                    const enhance = enhanceCheck.checked;
+                    const mode = enhanceModeSelect.value;
+                    const algorithm = algorithmSelect.value;
+
+                    let enhanceDetails = '';
+                    if (enhance) {
+                        switch (mode) {
+                            case 'auto':
+                                enhanceDetails = `自動(800px以下:${scale800Select.value}x, 1200px以下:${scale1200Select.value}x)`;
+                                break;
+                            case 'custom':
+                                enhanceDetails = `カスタム(${(customScaleSlider.value / 100).toFixed(1)}x)`;
+                                break;
+                            case 'preset':
+                                const activePreset = document.querySelector('.preset-btn.active').dataset.preset;
+                                enhanceDetails = `プリセット(${activePreset})`;
+                                break;
+                        }
+                    }
 
                     const convertedFile = {
                         name: getWebPFilename(file.name),
                         blob: webpBlob,
                         originalSize: originalSize,
                         webpSize: webpSize,
-                        compression: compression
+                        compression: compression,
+                        settings: {
+                            quality: quality,
+                            scale: scale,
+                            enhance: enhance,
+                            enhanceDetails: enhanceDetails,
+                            algorithm: algorithm
+                        }
                     };
 
                     convertedFiles.push(convertedFile);
@@ -357,20 +837,127 @@
             }, 3000);
         }
 
-        // WebP変換の実行
+        // 拡張版画質向上ロジック
+        function getEnhanceScaleFactor(width, height) {
+            if (!enhanceCheck.checked) return 1.0;
+            
+            const mode = enhanceModeSelect.value;
+            const maxDimension = Math.max(width, height);
+            
+            switch (mode) {
+                case 'auto':
+                    if (maxDimension <= 800) {
+                        return parseFloat(scale800Select.value);
+                    } else if (maxDimension <= 1200) {
+                        return parseFloat(scale1200Select.value);
+                    } else {
+                        return 1.0;
+                    }
+                
+                case 'custom':
+                    return parseFloat(customScaleSlider.value) / 100;
+                
+                case 'preset':
+                    const activePreset = document.querySelector('.preset-btn.active').dataset.preset;
+                    const preset = presets[activePreset];
+                    if (maxDimension <= 800) {
+                        return preset.scale800;
+                    } else if (maxDimension <= 1200) {
+                        return preset.scale1200;
+                    } else {
+                        return 1.0;
+                    }
+                
+                default:
+                    return 1.0;
+            }
+        }
+
+        // WebP変換の実行（設定対応版）
         function convertToWebP(file) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
+                
                 img.onload = function() {
-                    // キャンバスサイズを画像に合わせる
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-
+                    const originalWidth = img.width;
+                    const originalHeight = img.height;
+                    
+                    // 設定値を取得
+                    const quality = qualitySlider.value / 100; // 0.25-1.0に変換
+                    const scaleRatio = scaleSlider.value / 100; // 0.25-2.0に変換
+                    const enhance = enhanceCheck.checked;
+                    
+                    let finalWidth = originalWidth;
+                    let finalHeight = originalHeight;
+                    
+                    // 画質向上処理（小さい画像の拡大）
+                    if (enhance) {
+                        const enhanceScale = getEnhanceScaleFactor(originalWidth, originalHeight);
+                        if (enhanceScale > 1.0) {
+                            // 一時的に拡大処理
+                            const tempCanvas = document.createElement('canvas');
+                            const tempCtx = tempCanvas.getContext('2d');
+                            
+                            tempCanvas.width = originalWidth * enhanceScale;
+                            tempCanvas.height = originalHeight * enhanceScale;
+                            
+                            // アルゴリズムに基づく拡大設定
+                            const algorithm = algorithmSelect.value;
+                            tempCtx.imageSmoothingEnabled = algorithm !== 'low';
+                            if (tempCtx.imageSmoothingEnabled) {
+                                tempCtx.imageSmoothingQuality = algorithm;
+                            }
+                            tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+                            
+                            // 拡大された画像から最終サイズを計算
+                            finalWidth = Math.round(originalWidth * scaleRatio);
+                            finalHeight = Math.round(originalHeight * scaleRatio);
+                            
+                            // 最終キャンバスに描画
+                            const finalCanvas = document.createElement('canvas');
+                            const finalCtx = finalCanvas.getContext('2d');
+                            
+                            finalCanvas.width = finalWidth;
+                            finalCanvas.height = finalHeight;
+                            
+                            finalCtx.imageSmoothingEnabled = algorithm !== 'low';
+                            if (finalCtx.imageSmoothingEnabled) {
+                                finalCtx.imageSmoothingQuality = algorithm;
+                            }
+                            finalCtx.drawImage(tempCanvas, 0, 0, finalWidth, finalHeight);
+                            
+                            // WebPとして出力
+                            finalCanvas.toBlob((blob) => {
+                                if (blob) {
+                                    resolve(blob);
+                                } else {
+                                    reject(new Error('WebP変換に失敗しました'));
+                                }
+                            }, 'image/webp', quality);
+                            
+                            return;
+                        }
+                    }
+                    
+                    // 通常処理（拡大なしまたは拡大対象外）
+                    finalWidth = Math.round(originalWidth * scaleRatio);
+                    finalHeight = Math.round(originalHeight * scaleRatio);
+                    
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = finalWidth;
+                    canvas.height = finalHeight;
+                    
+                    // アルゴリズムに基づくリサンプリング設定
+                    const algorithm = algorithmSelect.value;
+                    ctx.imageSmoothingEnabled = algorithm !== 'low';
+                    if (ctx.imageSmoothingEnabled) {
+                        ctx.imageSmoothingQuality = algorithm;
+                    }
+                    
                     // 画像をキャンバスに描画
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
 
                     // WebPとして出力
                     canvas.toBlob((blob) => {
@@ -379,7 +966,7 @@
                         } else {
                             reject(new Error('WebP変換に失敗しました'));
                         }
-                    }, 'image/webp', 0.85); // 品質85%
+                    }, 'image/webp', quality);
                 };
 
                 img.onerror = function() {
@@ -412,12 +999,21 @@
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
             
+            const enhanceText = file.settings.enhance ? 
+                `有効(${file.settings.enhanceDetails})` : '無効';
+            
             resultItem.innerHTML = `
                 <div class="result-info">
                     <div class="result-name">${file.name}</div>
                     <div class="result-size">
                         ${file.originalSize}KB → ${file.webpSize}KB 
                         (${file.compression}% 削減)
+                    </div>
+                    <div class="result-settings">
+                        品質: ${file.settings.quality}% | サイズ: ${file.settings.scale}% | アルゴリズム: ${file.settings.algorithm}
+                    </div>
+                    <div class="result-settings">
+                        画質向上: ${enhanceText}
                     </div>
                 </div>
                 <button class="download-btn" onclick="downloadFile('${file.name}')">
