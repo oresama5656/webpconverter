@@ -469,6 +469,18 @@
                 </svg>
                 Converted Files
             </h2>
+            
+            <!-- AdSense広告 -->
+            <div id="adContainer" style="margin: 20px 0; padding: 20px; text-align: center; min-width: 300px; width: 100%;">
+                <!-- for WebP Converter -->
+                <ins class="adsbygoogle"
+                     style="display:block; min-height: 100px;"
+                     data-ad-client="ca-pub-6508744207193174"
+                     data-ad-slot="5800097298"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+            
             <div id="resultsList"></div>
             <button class="download-all-btn" onclick="downloadAll()" id="downloadAllBtn" style="display: none;">
                 <svg viewBox="0 0 24 24">
@@ -479,20 +491,6 @@
                 Download All
             </button>
         </div>
-    </div>
-
-    <!-- AdSense広告 -->
-    <div style="max-width: 650px; width: 100%; margin: 40px auto 20px auto; padding: 20px; text-align: center;">
-        <!-- for WebP Converter -->
-        <ins class="adsbygoogle"
-             style="display:block; min-height: 100px;"
-             data-ad-client="ca-pub-6508744207193174"
-             data-ad-slot="5800097298"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
     </div>
 
     <script>
@@ -630,6 +628,16 @@
                     downloadAllBtn.style.display = 'inline-block';
                 }
                 showSuccess(`Successfully converted ${convertedFiles.length} files to WebP format!`);
+                
+                // AdSense広告の初期化（結果表示後）
+                setTimeout(() => {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                        console.log('AdSense initialized after conversion');
+                    } catch(e) {
+                        console.error('AdSense initialization error:', e);
+                    }
+                }, 500);
             }
 
             // Hide progress after 3 seconds
