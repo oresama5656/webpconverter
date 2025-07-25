@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free WebP Converter – PNG, JPG, GIF to WebP (No Upload)</title>
+    <meta name="description" content="Convert images to WebP format instantly. No upload required - 100% client-side processing. Supports PNG, JPG, JPEG, GIF formats.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #202124;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin: 60px 0 40px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: normal;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #70757a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .format-icons {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 16px;
+        }
+
+        .main-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .upload-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .upload-area {
+            border: 2px dashed #dadce0;
+            border-radius: 8px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #fafafa;
+        }
+
+        .upload-area:hover {
+            border-color: #1a73e8;
+            background-color: #f8f9fa;
+        }
+
+        .upload-area.drag-over {
+            border-color: #1a73e8;
+            background-color: #e8f0fe;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #5f6368;
+        }
+
+        .upload-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #5f6368;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .select-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .select-btn:hover {
+            background-color: #1557b0;
+        }
+
+        .results {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 500px;
+            display: none;
+        }
+
+        .results h2 {
+            font-size: 18px;
+            font-weight: normal;
+            margin-bottom: 16px;
+            color: #202124;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-info {
+            flex-grow: 1;
+            min-width: 0;
+            margin-right: 16px;
+        }
+
+        .result-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #202124;
+        }
+
+        .result-size {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .download-btn {
+            background-color: #34a853;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+            min-width: 100px;
+        }
+
+        .download-btn:hover {
+            background-color: #137333;
+        }
+
+        .download-all-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .download-all-btn:hover {
+            background-color: #1557b0;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #e8eaed;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #1a73e8;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 8px;
+        }
+
+        .error {
+            background-color: #fce8e6;
+            color: #d93025;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .success {
+            background-color: #e6f4ea;
+            color: #137333;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                margin: 40px 0 30px 0;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .upload-area {
+                padding: 40px 20px;
+            }
+
+            .upload-icon {
+                font-size: 40px;
+            }
+
+            .upload-flow {
+                font-size: 18px;
+            }
+
+            .result-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .result-info {
+                margin-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .download-btn {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Free WebP Converter</h1>
+        <div class="subtitle">
+            <span class="format-icons">📷 PNG • JPG • GIF</span>
+            <span>→</span>
+            <span>WebP</span>
+        </div>
+    </div>
+
+    <div class="main-area">
+        <div class="upload-container">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drag & drop images here</div>
+                <input type="file" id="fileInput" multiple accept="image/*">
+                <button class="select-btn" id="selectBtn">Select Files</button>
+            </div>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Converting...</div>
+        </div>
+
+        <div class="results" id="results">
+            <h2>💾 Converted Files</h2>
+            <div id="resultsList"></div>
+            <button class="download-all-btn" onclick="downloadAll()" id="downloadAllBtn" style="display: none;">
+                Download All
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let convertedFiles = [];
+        let uploadedFiles = [];
+        
+        // DOM elements
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const selectBtn = document.getElementById('selectBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const results = document.getElementById('results');
+        const resultsList = document.getElementById('resultsList');
+        const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+        // Event listeners
+        uploadArea.addEventListener('click', function(e) {
+            if (e.target === uploadArea || e.target.classList.contains('upload-icon') || 
+                e.target.classList.contains('upload-text') || e.target.classList.contains('upload-flow')) {
+                fileInput.click();
+            }
+        });
+
+        selectBtn.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // Drag and drop events
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // File handling
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            // Filter image files
+            const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                showError('No supported image files found. Please select PNG, JPG, JPEG, GIF, or BMP files.');
+                return;
+            }
+
+            // File size check (100MB limit)
+            const maxSize = 100 * 1024 * 1024;
+            const oversizedFiles = imageFiles.filter(file => file.size > maxSize);
+            if (oversizedFiles.length > 0) {
+                showError(`File too large: ${oversizedFiles[0].name} (max 100MB)`);
+                return;
+            }
+
+            uploadedFiles = imageFiles;
+            
+            // Reset results
+            convertedFiles = [];
+            resultsList.innerHTML = '';
+            results.style.display = 'none';
+            downloadAllBtn.style.display = 'none';
+            
+            // Large file count confirmation
+            if (imageFiles.length > 50) {
+                if (!confirm(`${imageFiles.length} files selected. This may take some time. Continue?`)) {
+                    return;
+                }
+            }
+            
+            // Start conversion
+            convertFiles(uploadedFiles);
+        }
+
+        // File conversion
+        async function convertFiles(files) {
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = `0 / ${files.length} files converted`;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                try {
+                    const webpBlob = await convertToWebP(file);
+                    const originalSize = (file.size / 1024).toFixed(1);
+                    const webpSize = (webpBlob.size / 1024).toFixed(1);
+                    const compression = (((file.size - webpBlob.size) / file.size) * 100).toFixed(1);
+                    
+                    const convertedFile = {
+                        name: getWebPFilename(file.name),
+                        blob: webpBlob,
+                        originalSize: originalSize,
+                        webpSize: webpSize,
+                        compression: compression
+                    };
+
+                    convertedFiles.push(convertedFile);
+                    addResultItem(convertedFile);
+
+                    // Update progress
+                    const progress = ((i + 1) / files.length) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    progressText.textContent = `${i + 1} / ${files.length} files converted`;
+
+                } catch (error) {
+                    console.error('Conversion error:', error);
+                    showError(`Failed to convert ${file.name}: ${error.message}`);
+                }
+            }
+
+            // Conversion complete
+            if (convertedFiles.length > 0) {
+                progressText.textContent = `✅ Converted ${convertedFiles.length} files!`;
+                results.style.display = 'block';
+                if (convertedFiles.length > 1) {
+                    downloadAllBtn.style.display = 'inline-block';
+                }
+                showSuccess(`Successfully converted ${convertedFiles.length} files to WebP format!`);
+            }
+
+            // Hide progress after 3 seconds
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 3000);
+        }
+
+        // WebP conversion function
+        function convertToWebP(file) {
+            return new Promise((resolve, reject) => {
+                // File size check
+                if (file.size > 100 * 1024 * 1024) {
+                    reject(new Error('File too large'));
+                    return;
+                }
+
+                const img = new Image();
+                
+                img.onload = function() {
+                    try {
+                        const originalWidth = img.width;
+                        const originalHeight = img.height;
+                        
+                        // Image size validation
+                        if (originalWidth <= 0 || originalHeight <= 0) {
+                            reject(new Error('Invalid image size'));
+                            return;
+                        }
+                        
+                        // Fixed settings: 85% quality, 100% size
+                        const quality = 0.85;
+                        const scaleRatio = 1.0;
+                        
+                        const finalWidth = Math.max(1, Math.round(originalWidth * scaleRatio));
+                        const finalHeight = Math.max(1, Math.round(originalHeight * scaleRatio));
+                        
+                        // Canvas size limit (32767px)
+                        if (finalWidth > 32767 || finalHeight > 32767) {
+                            reject(new Error('Image too large after conversion'));
+                            return;
+                        }
+                        
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        canvas.width = finalWidth;
+                        canvas.height = finalHeight;
+                        
+                        // High quality resampling
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        
+                        // Draw image to canvas
+                        ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
+
+                        // Convert to WebP
+                        canvas.toBlob((blob) => {
+                            if (blob && blob.size > 0) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error('WebP conversion failed'));
+                            }
+                        }, 'image/webp', quality);
+                    } catch (error) {
+                        reject(new Error(`Conversion error: ${error.message}`));
+                    }
+                };
+
+                img.onerror = function() {
+                    reject(new Error('Failed to load image. Unsupported format.'));
+                };
+
+                // Load image with FileReader
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (e.target.result) {
+                        img.src = e.target.result;
+                    } else {
+                        reject(new Error('Failed to read file'));
+                    }
+                };
+                reader.onerror = function() {
+                    reject(new Error('Failed to read file'));
+                };
+                
+                try {
+                    reader.readAsDataURL(file);
+                } catch (error) {
+                    reject(new Error('Failed to read file'));
+                }
+            });
+        }
+
+        // Convert filename to WebP
+        function getWebPFilename(originalName) {
+            const lastDotIndex = originalName.lastIndexOf('.');
+            if (lastDotIndex === -1) {
+                return originalName + '.webp';
+            }
+            return originalName.substring(0, lastDotIndex) + '.webp';
+        }
+
+        // Add result item to list
+        function addResultItem(file) {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            
+            resultItem.innerHTML = `
+                <div class="result-info">
+                    <div class="result-name">${file.name}</div>
+                    <div class="result-size">
+                        ${file.originalSize}KB → ${file.webpSize}KB 
+                        (${file.compression}% smaller)
+                    </div>
+                </div>
+                <button class="download-btn" onclick="downloadFile('${file.name}')">
+                    Download
+                </button>
+            `;
+
+            resultsList.appendChild(resultItem);
+        }
+
+        // Download individual file
+        function downloadFile(filename) {
+            const file = convertedFiles.find(f => f.name === filename);
+            if (file) {
+                const url = URL.createObjectURL(file.blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = file.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Download all files
+        function downloadAll() {
+            convertedFiles.forEach((file, index) => {
+                setTimeout(() => {
+                    downloadFile(file.name);
+                }, index * 500);
+            });
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            resultsList.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = message;
+            resultsList.insertBefore(successDiv, resultsList.firstChild);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Free WebP Converter ready');
+        });
+    </script>
+</body>
+</html>
