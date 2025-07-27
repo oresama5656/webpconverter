@@ -10,156 +10,200 @@ const OUTPUT_DIR = process.env.OUTPUT_DIR || 'output_webp_resize';
 // 対応する画像拡張子
 const SUPPORTED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp'];
 
-/**
- * 画像の長辺に基づいて拡大率を決定
- * @param {number} width 
- * @param {number} height 
- * @returns {number} 拡大率
- */
-function getScaleFactor(width, height) {
-    const maxDimension = Math.max(width, height);
-    
-    if (maxDimension <= 800) {
-        return 2.0;
-    } else if (maxDimension <= 1200) {
-        return 1.5;
-    } else {
-        return 1.0; // 拡大しない
+// 設定管理クラス
+class ConversionConfig {
+    constructor(scaleFactor, enhance = true) {
+        this.scaleFactor = scaleFactor;
+        this.enhance = enhance;
+        this.webpOptions = {
+            quality: 90,
+            effort: 6,
+            alphaQuality: 100,
+            lossless: false
+        };
+        this.resizeOptions = {
+            kernel: sharp.kernel.lanczos3,
+            fit: 'fill'
+        };
+    }
+
+    getUpscaleRules() {
+        return {
+            small: { threshold: 800, scale: 2.0 },
+            medium: { threshold: 1200, scale: 1.5 },
+            large: { threshold: Infinity, scale: 1.0 }
+        };
+    }
+
+    getUpscaleFactorForDimensions(width, height) {
+        const maxDimension = Math.max(width, height);
+        const rules = this.getUpscaleRules();
+        
+        if (maxDimension <= rules.small.threshold) {
+            return rules.small.scale;
+        } else if (maxDimension <= rules.medium.threshold) {
+            return rules.medium.scale;
+        }
+        return rules.large.scale;
     }
 }
 
-/**
- * ファイル名の拡張子を.webpに変更
- * @param {string} filename 
- * @returns {string}
- */
-function changeExtensionToWebp(filename) {
-    const nameWithoutExt = path.parse(filename).name;
-    return nameWithoutExt + '.webp';
-}
+// ファイル操作ユーティリティクラス
+class FileUtils {
+    static isImageFile(filename) {
+        const ext = path.extname(filename).toLowerCase();
+        return SUPPORTED_EXTENSIONS.includes(ext);
+    }
 
-/**
- * temp_imagesフォルダを空にする
- */
-function clearTempDirectory() {
-    if (fs.existsSync(TEMP_DIR)) {
-        const files = fs.readdirSync(TEMP_DIR);
-        files.forEach(file => {
-            fs.unlinkSync(path.join(TEMP_DIR, file));
-        });
-        console.log('🗑️  temp_images フォルダをクリアしました');
+    static changeExtensionToWebp(filename) {
+        const nameWithoutExt = path.parse(filename).name;
+        return nameWithoutExt + '.webp';
+    }
+
+    static ensureDirectoryExists(dirPath) {
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+    }
+
+    static clearDirectory(dirPath) {
+        if (fs.existsSync(dirPath)) {
+            const files = fs.readdirSync(dirPath);
+            files.forEach(file => {
+                fs.unlinkSync(path.join(dirPath, file));
+            });
+            console.log(`🗑️  ${dirPath} フォルダをクリアしました`);
+        } else {
+            FileUtils.ensureDirectoryExists(dirPath);
+            console.log(`📁 ${dirPath} フォルダを作成しました`);
+        }
     }
 }
 
-/**
- * 画像を拡大してtemp_imagesに保存
- * @param {string} inputPath 
- * @param {string} tempPath 
- * @param {number} scaleFactor 
- */
-async function upscaleImage(inputPath, tempPath, scaleFactor) {
-    try {
-        const metadata = await sharp(inputPath).metadata();
-        const newWidth = Math.round(metadata.width * scaleFactor);
-        const newHeight = Math.round(metadata.height * scaleFactor);
-        
-        await sharp(inputPath)
-            .resize(newWidth, newHeight, {
-                kernel: sharp.kernel.lanczos3,
-                fit: 'fill'
-            })
-            .png({ quality: 100, compressionLevel: 0 })
-            .toFile(tempPath);
-            
-        console.log(`📈 拡大完了: ${path.basename(inputPath)} (${scaleFactor}x)`);
-    } catch (error) {
-        throw new Error(`画像拡大エラー: ${error.message}`);
+// 画像処理クラス
+class ImageProcessor {
+    constructor(config) {
+        this.config = config;
     }
-}
 
-/**
- * 画像をWebP変換（縮小率指定）
- * @param {string} inputPath 
- * @param {string} outputPath 
- * @param {number} scaleFactor 
- */
-async function convertToWebpWithResize(inputPath, outputPath, scaleFactor) {
-    try {
-        const metadata = await sharp(inputPath).metadata();
-        const newWidth = Math.round(metadata.width * scaleFactor);
-        const newHeight = Math.round(metadata.height * scaleFactor);
-        
-        await sharp(inputPath)
-            .resize(newWidth, newHeight, {
-                kernel: sharp.kernel.lanczos3,
-                fit: 'fill'
-            })
-            .webp({ 
-                quality: 90,
-                effort: 6,
-                alphaQuality: 100,
-                lossless: false
-            })
-            .toFile(outputPath);
-            
-        console.log(`📏 リサイズ: ${metadata.width}x${metadata.height} → ${newWidth}x${newHeight}`);
-        console.log(`🔄 WebP変換完了: ${path.basename(outputPath)}`);
-    } catch (error) {
-        throw new Error(`WebP変換エラー: ${error.message}`);
+    async getImageMetadata(imagePath) {
+        return await sharp(imagePath).metadata();
     }
-}
 
-/**
- * 拡大処理ありでWebP変換
- * @param {string} inputPath 
- * @param {string} outputPath 
- * @param {number} targetScaleFactor 
- */
-async function convertToWebpWithEnhancement(inputPath, outputPath, targetScaleFactor) {
-    try {
-        const metadata = await sharp(inputPath).metadata();
-        const originalWidth = metadata.width;
-        const originalHeight = metadata.height;
-        
-        // 拡大率を決定
-        const enhanceScaleFactor = getScaleFactor(originalWidth, originalHeight);
-        
-        if (enhanceScaleFactor > 1.0) {
-            // 拡大処理
-            const tempFilename = path.parse(path.basename(inputPath)).name + '_temp.png';
-            const tempPath = path.join(TEMP_DIR, tempFilename);
+    async upscaleImage(inputPath, outputPath, scaleFactor) {
+        try {
+            const metadata = await this.getImageMetadata(inputPath);
+            const newWidth = Math.round(metadata.width * scaleFactor);
+            const newHeight = Math.round(metadata.height * scaleFactor);
             
-            await upscaleImage(inputPath, tempPath, enhanceScaleFactor);
-            
-            // 拡大画像を目標サイズにリサイズしつつWebP変換
-            const targetWidth = Math.round(originalWidth * targetScaleFactor);
-            const targetHeight = Math.round(originalHeight * targetScaleFactor);
-            
-            await sharp(tempPath)
-                .resize(targetWidth, targetHeight, {
-                    kernel: sharp.kernel.lanczos3,
-                    fit: 'fill'
-                })
-                .webp({ 
-                    quality: 90,
-                    effort: 6,
-                    alphaQuality: 100,
-                    lossless: false
-                })
+            await sharp(inputPath)
+                .resize(newWidth, newHeight, this.config.resizeOptions)
+                .png({ quality: 100, compressionLevel: 0 })
                 .toFile(outputPath);
                 
-            console.log(`📏 拡大→リサイズ: ${originalWidth}x${originalHeight} → ${targetWidth}x${targetHeight} (拡大${enhanceScaleFactor}x)`);
+            console.log(`📈 拡大完了: ${path.basename(inputPath)} (${scaleFactor}x)`);
+        } catch (error) {
+            throw new Error(`画像拡大エラー: ${error.message}`);
+        }
+    }
+
+    async convertToWebp(inputPath, outputPath, scaleFactor) {
+        try {
+            const metadata = await this.getImageMetadata(inputPath);
+            const newWidth = Math.round(metadata.width * scaleFactor);
+            const newHeight = Math.round(metadata.height * scaleFactor);
+            
+            await sharp(inputPath)
+                .resize(newWidth, newHeight, this.config.resizeOptions)
+                .webp(this.config.webpOptions)
+                .toFile(outputPath);
+                
+            console.log(`📏 リサイズ: ${metadata.width}x${metadata.height} → ${newWidth}x${newHeight}`);
+            console.log(`🔄 WebP変換完了: ${path.basename(outputPath)}`);
+        } catch (error) {
+            throw new Error(`WebP変換エラー: ${error.message}`);
+        }
+    }
+
+    async convertWithEnhancement(inputPath, outputPath, targetScaleFactor) {
+        try {
+            const metadata = await this.getImageMetadata(inputPath);
+            const originalWidth = metadata.width;
+            const originalHeight = metadata.height;
+            
+            const enhanceScaleFactor = this.config.getUpscaleFactorForDimensions(originalWidth, originalHeight);
+            
+            if (enhanceScaleFactor > 1.0) {
+                return await this._processWithUpscaling(
+                    inputPath, outputPath, metadata, 
+                    enhanceScaleFactor, targetScaleFactor
+                );
+            } else {
+                return await this.convertToWebp(inputPath, outputPath, targetScaleFactor);
+            }
+        } catch (error) {
+            throw new Error(`WebP変換エラー: ${error.message}`);
+        }
+    }
+
+    async _processWithUpscaling(inputPath, outputPath, metadata, enhanceScale, targetScale) {
+        const tempFilename = path.parse(path.basename(inputPath)).name + '_temp.png';
+        const tempPath = path.join(TEMP_DIR, tempFilename);
+        
+        try {
+            await this.upscaleImage(inputPath, tempPath, enhanceScale);
+            
+            const targetWidth = Math.round(metadata.width * targetScale);
+            const targetHeight = Math.round(metadata.height * targetScale);
+            
+            await sharp(tempPath)
+                .resize(targetWidth, targetHeight, this.config.resizeOptions)
+                .webp(this.config.webpOptions)
+                .toFile(outputPath);
+                
+            console.log(`📏 拡大→リサイズ: ${metadata.width}x${metadata.height} → ${targetWidth}x${targetHeight} (拡大${enhanceScale}x)`);
             console.log(`🔄 WebP変換完了: ${path.basename(outputPath)}`);
             
-            // 一時ファイルを削除
             fs.unlinkSync(tempPath);
-        } else {
-            // 拡大なしで直接変換
-            await convertToWebpWithResize(inputPath, outputPath, targetScaleFactor);
+        } catch (error) {
+            if (fs.existsSync(tempPath)) {
+                fs.unlinkSync(tempPath);
+            }
+            throw error;
         }
-    } catch (error) {
-        throw new Error(`WebP変換エラー: ${error.message}`);
     }
+}
+
+// 下位互換性のための関数（非推奨）
+function getScaleFactor(width, height) {
+    const config = new ConversionConfig(1.0);
+    return config.getUpscaleFactorForDimensions(width, height);
+}
+
+function changeExtensionToWebp(filename) {
+    return FileUtils.changeExtensionToWebp(filename);
+}
+
+function clearTempDirectory() {
+    FileUtils.clearDirectory(TEMP_DIR);
+}
+
+async function upscaleImage(inputPath, tempPath, scaleFactor) {
+    const config = new ConversionConfig(1.0);
+    const processor = new ImageProcessor(config);
+    return await processor.upscaleImage(inputPath, tempPath, scaleFactor);
+}
+
+async function convertToWebpWithResize(inputPath, outputPath, scaleFactor) {
+    const config = new ConversionConfig(scaleFactor);
+    const processor = new ImageProcessor(config);
+    return await processor.convertToWebp(inputPath, outputPath, scaleFactor);
+}
+
+async function convertToWebpWithEnhancement(inputPath, outputPath, targetScaleFactor) {
+    const config = new ConversionConfig(targetScaleFactor, true);
+    const processor = new ImageProcessor(config);
+    return await processor.convertWithEnhancement(inputPath, outputPath, targetScaleFactor);
 }
 
 /**
@@ -170,33 +214,32 @@ async function convertToWebpWithEnhancement(inputPath, outputPath, targetScaleFa
  */
 async function processImage(filename, scaleFactor, enhance) {
     const inputPath = path.join(INPUT_DIR, filename);
-    const outputFilename = changeExtensionToWebp(filename);
+    const outputFilename = FileUtils.changeExtensionToWebp(filename);
     const outputPath = path.join(OUTPUT_DIR, outputFilename);
+    
+    const config = new ConversionConfig(scaleFactor, enhance);
+    const processor = new ImageProcessor(config);
     
     try {
         console.log(`\n🔄 処理開始: ${filename}`);
         
-        // 元画像のメタデータを取得
-        const metadata = await sharp(inputPath).metadata();
-        const originalWidth = metadata.width;
-        const originalHeight = metadata.height;
+        const metadata = await processor.getImageMetadata(inputPath);
         
-        console.log(`📏 元サイズ: ${originalWidth} x ${originalHeight}`);
+        console.log(`📏 元サイズ: ${metadata.width} x ${metadata.height}`);
         console.log(`🔍 縮小率: ${scaleFactor}x`);
         console.log(`🎨 画質向上: ${enhance ? '有効' : '無効'}`);
         
         if (enhance) {
-            // 拡大処理あり
-            await convertToWebpWithEnhancement(inputPath, outputPath, scaleFactor);
+            await processor.convertWithEnhancement(inputPath, outputPath, scaleFactor);
         } else {
-            // 拡大処理なし
-            await convertToWebpWithResize(inputPath, outputPath, scaleFactor);
+            await processor.convertToWebp(inputPath, outputPath, scaleFactor);
         }
         
         console.log(`✅ 変換完了: ${outputFilename}`);
         
     } catch (error) {
         console.error(`❌ エラー: ${filename} - ${error.message}`);
+        throw error;
     }
 }
 
@@ -208,33 +251,32 @@ async function processImage(filename, scaleFactor, enhance) {
  * @param {string} outputDir 
  */
 async function processSpecificImage(filePath, scaleFactor, enhance, outputDir = OUTPUT_DIR) {
-    const outputFilename = changeExtensionToWebp(path.basename(filePath));
+    const outputFilename = FileUtils.changeExtensionToWebp(path.basename(filePath));
     const outputPath = path.join(outputDir, outputFilename);
+    
+    const config = new ConversionConfig(scaleFactor, enhance);
+    const processor = new ImageProcessor(config);
     
     try {
         console.log(`\n🔄 処理開始: ${path.basename(filePath)}`);
         
-        // 元画像のメタデータを取得
-        const metadata = await sharp(filePath).metadata();
-        const originalWidth = metadata.width;
-        const originalHeight = metadata.height;
+        const metadata = await processor.getImageMetadata(filePath);
         
-        console.log(`📏 元サイズ: ${originalWidth} x ${originalHeight}`);
+        console.log(`📏 元サイズ: ${metadata.width} x ${metadata.height}`);
         console.log(`🔍 縮小率: ${scaleFactor}x`);
         console.log(`🎨 画質向上: ${enhance ? '有効' : '無効'}`);
         
         if (enhance) {
-            // 拡大処理あり
-            await convertToWebpWithEnhancement(filePath, outputPath, scaleFactor);
+            await processor.convertWithEnhancement(filePath, outputPath, scaleFactor);
         } else {
-            // 拡大処理なし
-            await convertToWebpWithResize(filePath, outputPath, scaleFactor);
+            await processor.convertToWebp(filePath, outputPath, scaleFactor);
         }
         
         console.log(`✅ 変換完了: ${outputFilename}`);
         
     } catch (error) {
         console.error(`❌ エラー: ${path.basename(filePath)} - ${error.message}`);
+        throw error;
     }
 }
 
@@ -267,15 +309,11 @@ async function main() {
         // 特定のファイルを処理
         console.log(`📊 処理対象: ${specificFiles.length} ファイル`);
         
-        // 出力フォルダの作成
-        if (!fs.existsSync(OUTPUT_DIR)) {
-            fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-        }
+        FileUtils.ensureDirectoryExists(OUTPUT_DIR);
         
         for (const filePath of specificFiles) {
             if (fs.existsSync(filePath)) {
-                const ext = path.extname(filePath).toLowerCase();
-                if (SUPPORTED_EXTENSIONS.includes(ext)) {
+                if (FileUtils.isImageFile(filePath)) {
                     await processSpecificImage(filePath, scaleFactor, enhance);
                 } else {
                     console.log(`⚠️  スキップ: ${path.basename(filePath)} (対応形式外)`);
@@ -291,18 +329,11 @@ async function main() {
             process.exit(1);
         }
         
-        // 出力フォルダの作成
-        if (!fs.existsSync(OUTPUT_DIR)) {
-            fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-        }
+        FileUtils.ensureDirectoryExists(OUTPUT_DIR);
+        FileUtils.clearDirectory(TEMP_DIR);
         
-        // temp_imagesフォルダのクリア
-        clearTempDirectory();
-        
-        // 対象ファイルの取得
         const files = fs.readdirSync(INPUT_DIR).filter(file => {
-            const ext = path.extname(file).toLowerCase();
-            return SUPPORTED_EXTENSIONS.includes(ext);
+            return FileUtils.isImageFile(file);
         });
         
         if (files.length === 0) {
@@ -324,19 +355,49 @@ async function main() {
     console.log(`📁 出力先: ${OUTPUT_DIR}/`);
 }
 
-// エラーハンドリング
-process.on('uncaughtException', (error) => {
-    console.error('❌ 予期しないエラー:', error.message);
-    process.exit(1);
-});
+// エラーハンドリングクラス
+class ErrorHandler {
+    static handleError(error, context = '') {
+        const timestamp = new Date().toISOString();
+        const message = context ? `${context}: ${error.message}` : error.message;
+        
+        console.error(`❌ [${timestamp}] ${message}`);
+        
+        if (process.env.NODE_ENV === 'development') {
+            console.error('スタックトレース:', error.stack);
+        }
+    }
 
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('❌ 未処理のPromise拒否:', reason);
-    process.exit(1);
-});
+    static handleAsyncError(error, context = '') {
+        ErrorHandler.handleError(error, context);
+        
+        // 致命的でないエラーの場合は処理を継続
+        if (error.code === 'ENOENT' || error.code === 'EACCES') {
+            console.log('⚠️ 処理を継続します...');
+            return false; // 継続
+        }
+        
+        return true; // 終了
+    }
+
+    static setupGlobalHandlers() {
+        process.on('uncaughtException', (error) => {
+            ErrorHandler.handleError(error, '予期しないエラー');
+            process.exit(1);
+        });
+
+        process.on('unhandledRejection', (reason, promise) => {
+            ErrorHandler.handleError(reason, '未処理のPromise拒否');
+            process.exit(1);
+        });
+    }
+}
+
+// グローバルエラーハンドラーの設定
+ErrorHandler.setupGlobalHandlers();
 
 // メイン処理実行
 main().catch(error => {
-    console.error('❌ メイン処理エラー:', error.message);
+    ErrorHandler.handleError(error, 'メイン処理エラー');
     process.exit(1);
 }); 
