@@ -364,6 +364,16 @@
             font-weight: 500;
         }
 
+        h1 a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        h1 a:hover {
+            opacity: 0.8;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 20px 15px;
@@ -413,7 +423,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Free WebP Converter</h1>
+        <h1><a href="https://coommu.com" target="_blank" rel="noopener noreferrer">Free WebP Converter</a></h1>
         <div class="subtitle">
             <span class="format-icons">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
