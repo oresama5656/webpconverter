@@ -3,4 +3,6 @@ node_modules/
 .DS_Store
 temp_images/
 output_webp/
-output_webp_resize/ 
+output_webp_resize/
+Raddit投稿用.txt/
+X投稿用.txt/
