@@ -1,12 +1,2 @@
-🚀 ブラウザだけで動くWebP変換ツール作りました！
-
-✅ アップロード不要・完全ローカル処理
-✅ PNG/JPG/GIF → WebPに一括変換
-✅ ZIPでまとめてダウンロード
-✅ ファイルサイズ30-50%削減
-
-画像最適化に便利です📸
-
-https://www.coommu.com/wp-content/uploads/free-webp-converter.html
-
-#WebP #Web開発 #JavaScript #画像最適化 #プライバシー保護
+面倒で放置してたWebP変換、チャッピーの助けでブラウザ完結ツールに仕立てた。ローカル一括圧縮→即DL、快適すぎ。
+https://www.coommu.com/wp-content/uploads/free-webp-converter.html #画像最適化
