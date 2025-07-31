@@ -1,0 +1,14 @@
+**Free WebP Converter Tool**
+
+Made a simple browser-based image converter that turns PNG/JPG/GIF into WebP format. 
+
+✅ Works completely offline in your browser
+✅ No file uploads - everything stays on your device  
+✅ Batch convert multiple images
+✅ Downloads as ZIP file
+
+Reduces file sizes by 30-50% typically. Just drag & drop your images and hit convert.
+
+**Try it:** https://www.coommu.com/wp-content/uploads/free-webp-converter.html
+
+Let me know if it works for you! 👍

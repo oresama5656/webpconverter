@@ -6,6 +6,7 @@
     <title>Free WebP Converter – PNG, JPG, GIF to WebP (No Upload)</title>
     <meta name="description" content="Convert images to WebP format instantly. No upload required - 100% client-side processing. Supports PNG, JPG, JPEG, GIF formats.">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6508744207193174"
          crossorigin="anonymous"></script>
     <style>
@@ -792,13 +793,42 @@
             }
         }
 
-        // Download all files
-        function downloadAll() {
-            convertedFiles.forEach((file, index) => {
-                setTimeout(() => {
-                    downloadFile(file.name);
-                }, index * 500);
-            });
+        // Download all files as ZIP
+        async function downloadAll() {
+            if (convertedFiles.length === 0) return;
+            
+            try {
+                const zip = new JSZip();
+                
+                // Add each file to ZIP
+                convertedFiles.forEach(file => {
+                    zip.file(file.name, file.blob);
+                });
+                
+                // Generate ZIP file
+                const zipBlob = await zip.generateAsync({type: "blob"});
+                
+                // Download ZIP file
+                const url = URL.createObjectURL(zipBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `webp-converted-files-${new Date().toISOString().slice(0,10)}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+            } catch (error) {
+                console.error('ZIP creation error:', error);
+                showError('Failed to create ZIP file. Falling back to individual downloads.');
+                
+                // Fallback to individual downloads
+                convertedFiles.forEach((file, index) => {
+                    setTimeout(() => {
+                        downloadFile(file.name);
+                    }, index * 500);
+                });
+            }
         }
 
         // Show error message
