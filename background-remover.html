@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Background Remover – AI-Powered Background Removal</title>
     <meta name="description" content="Remove backgrounds from images using AI. No upload required - 100% client-side processing with rembg-js.">
+    
+    <!-- OGP Meta Tags -->
+    <meta property="og:title" content="Background Remover">
+    <meta property="og:description" content="Remove backgrounds from images using AI. No upload required - 100% client-side processing with rembg-js for privacy and accuracy.">
+    <meta property="og:image" content="https://www.coommu.com/wp-content/uploads/2025/07/backgroundremover1200x630.webp">
+    <meta property="og:url" content="https://www.coommu.com/wp-content/uploads/background-remover.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Coommu">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6508744207193174"
          crossorigin="anonymous"></script>
@@ -15,6 +26,40 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-91GWWQXW8F');
+    </script>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Background Remover",
+        "description": "Remove backgrounds from images using AI. No upload required - 100% client-side processing with rembg-js for privacy and accuracy.",
+        "url": "https://www.coommu.com/wp-content/uploads/background-remover.html",
+        "applicationCategory": "Multimedia",
+        "operatingSystem": "Web Browser",
+        "price": "0",
+        "priceCurrency": "USD",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "AI-powered background removal",
+            "Automatic image segmentation",
+            "High-quality transparent output",
+            "No upload required",
+            "Client-side processing",
+            "PNG download with transparency"
+        ],
+        "browserRequirements": "Requires JavaScript enabled browser with WebAssembly support",
+        "softwareVersion": "1.0",
+        "author": {
+            "@type": "Person",
+            "name": "Ryo"
+        }
+    }
     </script>
     <style>
         * {
@@ -417,7 +462,7 @@
         <h1><a href="https://coommu.com" target="_blank" rel="noopener noreferrer">Background Remover</a></h1>
         <div class="subtitle">
             <span class="format-icons">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
                 JPG • PNG • WebP
             </span>
             <span>→</span>
@@ -427,9 +472,9 @@
 
     <div class="main-area">
         <div class="upload-container">
-            <div class="upload-area" id="uploadArea">
+            <div class="upload-area" id="uploadArea" aria-label="Drop images here or click to select files for background removal">
                 <div class="upload-icon">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                         <polyline points="14,2 14,8 20,8"/>
                         <line x1="16" y1="13" x2="8" y2="13"/>
@@ -438,9 +483,9 @@
                     </svg>
                 </div>
                 <div class="upload-text">Drag & drop your image here</div>
-                <input type="file" id="fileInput" accept="image/*">
-                <button class="select-btn" id="selectBtn">
-                    <svg viewBox="0 0 24 24">
+                <input type="file" id="fileInput" accept="image/*" aria-label="Select image files for background removal">
+                <button class="select-btn" id="selectBtn" aria-label="Select image files from device">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                         <polyline points="14,2 14,8 20,8"/>
                         <line x1="16" y1="13" x2="8" y2="13"/>
@@ -476,8 +521,8 @@
             </div>
             
             <div class="download-container">
-                <button class="download-btn" id="downloadBtn" disabled>
-                    <svg viewBox="0 0 24 24">
+                <button class="download-btn" id="downloadBtn" disabled aria-label="Download image with background removed">
+                    <svg viewBox="0 0 24 24" aria-label="Download icon">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7,10 12,15 17,10"/>
                         <line x1="12" y1="15" x2="12" y2="3"/>
@@ -826,5 +871,13 @@
             initializeBackgroundRemoval();
         });
     </script>
+
+    <footer style="margin-top: 120px; font-size: 13px; color: #9c948b; text-align: center; max-width: 650px; width: 100%; margin-left: auto; margin-right: auto; line-height: 1.6;">
+        Background Remover uses AI to automatically remove<br>
+        backgrounds from images with professional accuracy.<br>
+        No upload required – all processing happens locally on your device.
+        <br><br>
+        <a href="https://www.coommu.com/" style="color: #9c948b;">▶ Browse more free tools</a>
+    </footer>
 </body>
 </html>
