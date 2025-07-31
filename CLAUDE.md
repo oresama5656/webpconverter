@@ -94,3 +94,8 @@ The project consists of:
 
 ### Development Tools
 - `pkg`: Executable generation for Windows deployment
+
+## Notifications
+When a task is completed or user confirmation is needed, run:
+```powershell
+powershell.exe -Command "Import-Module BurntToast; New-BurntToastNotification -Text 'Claude Code', 'Task Completed or Needs Confirmation'"
